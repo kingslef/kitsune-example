@@ -3,7 +3,7 @@ Kitsune Example
 
 Small example application using [kitsune-dsu](http://kitsune-dsu.com/).
 
-Application has an array of 160 MB data (20971520 elements, each element has two
+Application has an array of 160 MB data (20971520 elements, each element contains two
 uint32_t values). v2 updates the uint32_t's to two uint64_t values instead.
 
 Compilation
@@ -35,22 +35,19 @@ Example output
 --------------
 
 ``` sh
-The process id is (16325).
-Initializing
+The process id is (17032).
+Initializing 20971520 elements, each 8 bytes
 Initialized
 Calculating checksum
 Data checksum: 45037069120309576
 0
 1
 2
+<doupd in other terminal>
+Updating, 20971520 elements, each 16 bytes
+Calculating checksum
+Data checksum: 45037069120309576
 3
 4
 5
-6
-7
-<doupd in other terminal>
-Updating
-Calculating checksum
-Data checksum: 45037069120309576
-8
 ```

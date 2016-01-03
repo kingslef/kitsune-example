@@ -6,15 +6,15 @@
 
 #include <kitsune.h>
 
-static const unsigned int sleeptime E_MANUAL_MIGRATE = 5;
+static const unsigned int sleeptime = 5;
 
-#define DATA_SIZE (20971520)
+#define N_DATA_ELEMENTS (20971520u)
 
-data_t *E_PTRARRAY(DATA_SIZE) synchronized_data;
+data_t *E_PTRARRAY(N_DATA_ELEMENTS) synchronized_data;
 
 void initialize_synchronized_data(data_t *data)
 {
-    for (uint32_t i = 0; i < DATA_SIZE; i++) {
+    for (uint32_t i = 0; i < N_DATA_ELEMENTS; i++) {
         data[i] = (data_t){ .a = (uint32_t)rand(), .b = (uint32_t)rand() };
     }
 }
@@ -22,7 +22,7 @@ void initialize_synchronized_data(data_t *data)
 uint64_t calculate_data_checksum(const data_t *data)
 {
     uint64_t sum = 0;
-    for (uint32_t i = 0; i < DATA_SIZE; i++) {
+    for (uint32_t i = 0; i < N_DATA_ELEMENTS; i++) {
         sum += (data[i].a + data[i].b);
     }
     return sum;
@@ -35,9 +35,10 @@ int main(void) E_NOTELOCALS
     MIGRATE_LOCAL(counter);
 
     if (!kitsune_is_updating()) {
-        printf("Initializing\n");
+        printf("Initializing %u elements, each %zu bytes\n",
+               N_DATA_ELEMENTS, sizeof(data_t));
 
-        synchronized_data = malloc(sizeof(*synchronized_data) * DATA_SIZE);
+        synchronized_data = malloc(sizeof(*synchronized_data) * N_DATA_ELEMENTS);
         if (!synchronized_data) {
             printf("malloc failed\n");
             return EXIT_FAILURE;
@@ -46,7 +47,8 @@ int main(void) E_NOTELOCALS
         initialize_synchronized_data(synchronized_data);
         printf("Initialized\n");
     } else {
-        printf("Updating\n");
+        printf("Updating, %u elements, each %zu bytes\n",
+               N_DATA_ELEMENTS, sizeof(data_t));
 
         kitsune_do_automigrate();
     }
