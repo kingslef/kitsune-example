@@ -1,0 +1,7 @@
+struct data_s.a -> struct data_s.a: {
+       $out = (uint64_t)$in;
+}
+
+struct data_s.b -> struct data_s.b: {
+       $out = (uint64_t)$in;
+}
