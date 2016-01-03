@@ -28,7 +28,7 @@ dsu.c: kitsune.ktt kitsune2.ktt transformation.xf
 	$(KITSUNE_PATH)/bin/xfgen $@ $^
 
 dsu.o: dsu.c
-	$(CC) -fPIC $(CFLAGS) -isystem $(KITSUNE_PATH)/include $(LDFLAGS) -c $^ -o $@
+	$(CC) -fPIC -Wno-unused-parameter $(CFLAGS) -isystem $(KITSUNE_PATH)/include $(LDFLAGS) -c $^ -o $@
 
 %.so: kitsune_main-v1.ktt
 	$(CC) -shared -o $@ $(subst .ktt,.o,$^) -L$(KITSUNE_PATH)/lib -lkitsune -ldl
