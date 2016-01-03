@@ -37,3 +37,8 @@ dsu.o: dsu.c
 	$(CC) -shared -o $@ \
 		dsu.o kitsune_main-v2.o \
 		-L$(KITSUNE_PATH)/lib -lkitsune -ldl
+
+.PHONY: clean
+
+clean:
+	rm -f *.o *.so dsu.c *.ktt
