@@ -8,7 +8,7 @@ CFLAGS += -D_POSIX_C_SOURCE=199309L
 
 .PHONY: all
 
-all: kitsune-example.so
+all: kitsune-example.so kitsune-v2.so
 
 kitsune_%-v1.ktt: %.c
 	$(KITSUNE_PATH)/bin/ktcc $(CFLAGS) -fPIC -isystem $(KITSUNE_PATH)/include -include data.h \
