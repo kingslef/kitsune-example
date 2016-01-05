@@ -10,7 +10,9 @@
 
 static const unsigned int sleeptime = 5;
 
+#ifndef N_DATA_ELEMENTS
 #define N_DATA_ELEMENTS (20971520u)
+#endif
 
 data_t *E_PTRARRAY(N_DATA_ELEMENTS) synchronized_data;
 

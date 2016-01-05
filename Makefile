@@ -11,6 +11,9 @@ ifndef KITSUNE_PATH
     $(error "Define KITSUNE_PATH=<kitsune-core/bin>")
 endif
 
+ifdef N_DATA_ELEMENTS
+    CFLAGS += -DN_DATA_ELEMENTS=$(N_DATA_ELEMENTS)
+endif
 
 .PHONY: all
 
