@@ -3,6 +3,7 @@ CFLAGS += -Wall -Wextra
 CFLAGS += -Wswitch-default -Wcast-align -Winline
 CFLAGS += -Wshadow -Wwrite-strings -Wconversion
 CFLAGS += -Wundef -Wunused-result
+CFLAGS += -g
 
 CFLAGS += -D_POSIX_C_SOURCE=199309L
 
