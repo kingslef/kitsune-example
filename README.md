@@ -35,19 +35,9 @@ Example output
 --------------
 
 ``` sh
-The process id is (17032).
-Initializing 20971520 elements, each 8 bytes
-Initialized
-Calculating checksum
-Data checksum: 45037069120309576
-0
-1
-2
+$ /home/aatos/sources/kitsune-core/bin/bin/driver kitsune-example.so
+The process id is (12985).
+20971520, 167772160
 <doupd in other terminal>
-Updating, 20971520 elements, each 16 bytes
-Calculating checksum
-Data checksum: 45037069120309576
-3
-4
-5
+20971520, 335544320
 ```
