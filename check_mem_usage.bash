@@ -1,7 +1,47 @@
 #!/usr/bin/env bash
 
+################################################################################
+# Small script for checking memory usage increase after update.
+#
+# Runs the example application few times and increasing the number of elements
+# in the array each time by tenfold.
+#
+# Prints RSZ, VSZ and SZ increase between normal execution and after update has
+# been running $SLEEP_AFTER_UPDATE seconds.
+#
+# Should produce something like this:
+#
+#    $ ./check_mem_usage.bash
+#    1000, 8000
+#    1000, 16000
+#    RSZ     VSZ     SZ
+#    328     136     34
+#
+#    10000, 80000
+#    10000, 160000
+#    RSZ     VSZ     SZ
+#    1656    1484    371
+#
+#    100000, 800000
+#    100000, 1600000
+#    RSZ     VSZ     SZ
+#    14112   14108   3527
+#
+#    1000000, 8000000
+#    1000000, 16000000
+#    RSZ     VSZ     SZ
+#    140784  140636  35159
+#
+#    10000000, 80000000
+#    10000000, 160000000
+#    RSZ     VSZ     SZ
+#    1406436 1406296 351574
+#
+################################################################################
+
 APPLICATION="kitsune-example.so"
 APPLICATION_V2="kitsune-v2.so"
+SLEEP_AFTER_UPDATE="20"
 
 if [ ! -d "${KITSUNE_PATH}" ]
 then
@@ -57,15 +97,28 @@ kill_app() {
     fi
 }
 
-check_mem() {
+check_mem_usage_increase() {
     local pid="$1"
 
-    ps -o rsz,vsz,sz,pmem,cmd "${pid}"
-    if [ "$?" -ne 0 ]
-    then
-        echo "Failed to check memory usage"
-        exit 1
-    fi
+    local rsz_1=
+    rsz_1="$(ps --no-headers --format=rsz "${pid}")"
+    local vsz_1=
+    vsz_1="$(ps --no-headers --format=vsz "${pid}")"
+    local sz_1=
+    sz_1="$(ps --no-headers --format=sz "${pid}")"
+
+    update_app "$(pidof driver)"
+    sleep "${SLEEP_AFTER_UPDATE}"
+
+    local rsz_2=
+    rsz_2="$(ps --no-headers --format=rsz "${pid}")"
+    local vsz_2=
+    vsz_2="$(ps --no-headers --format=vsz "${pid}")"
+    local sz_2=
+    sz_2="$(ps --no-headers --format=sz "${pid}")"
+
+    printf 'RSZ\tVSZ\tSZ\n'
+    printf '%d\t%d\t%d\n' $(( rsz_2 - rsz_1 )) $(( vsz_2 - vsz_1 )) $(( sz_2 - sz_1 ))
 }
 
 pidof driver >/dev/null 2>&1
@@ -80,15 +133,10 @@ do
     compile_app "${n}"
 
     start_app
-
     get_pid
-
     sleep 1
-    check_mem "$(pidof driver)"
 
-    update_app "$(pidof driver)"
-    sleep 5
-    check_mem "$(pidof driver)"
+    check_mem_usage_increase "$(pidof driver)"
 
     kill_app "$(pidof driver)"
 
