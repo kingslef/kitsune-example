@@ -7,6 +7,11 @@ CFLAGS += -g
 
 CFLAGS += -D_POSIX_C_SOURCE=199309L
 
+ifndef KITSUNE_PATH
+    $(error "Define KITSUNE_PATH=<kitsune-core/bin>")
+endif
+
+
 .PHONY: all
 
 all: kitsune-example.so kitsune-v2.so
