@@ -42,9 +42,16 @@
 APPLICATION="kitsune-example.so"
 APPLICATION_V2="kitsune-v2.so"
 SLEEP_AFTER_UPDATE="20"
-DRIVER_PIDOF="driver"
 DRIVER_START="${KITSUNE_PATH}/bin/driver"
-APP_START="${DRIVER_START}"
+
+if [ "$1" = "--valgrind" ]
+then
+    DRIVER_PIDOF="valgrind"
+    APP_START="valgrind --quiet --leak-check=full ${DRIVER_START}"
+else
+    DRIVER_PIDOF="driver"
+    APP_START="${DRIVER_START}"
+fi
 
 if [ ! -d "${KITSUNE_PATH}" ]
 then
