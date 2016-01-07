@@ -42,6 +42,9 @@
 APPLICATION="kitsune-example.so"
 APPLICATION_V2="kitsune-v2.so"
 SLEEP_AFTER_UPDATE="20"
+DRIVER_PIDOF="driver"
+DRIVER_START="${KITSUNE_PATH}/bin/driver"
+APP_START="${DRIVER_START}"
 
 if [ ! -d "${KITSUNE_PATH}" ]
 then
@@ -56,7 +59,7 @@ compile_app() {
 }
 
 start_app() {
-    "${KITSUNE_PATH}"/bin/driver "${APPLICATION}" >/dev/null &
+    ${APP_START} "${APPLICATION}" >/dev/null &
     if [ "$?" -ne 0 ]
     then
         echo "Failed to start application ${APPLICATION}"
@@ -66,7 +69,7 @@ start_app() {
 
 get_pid() {
     local pid=
-    pid="$(pidof -s driver)"
+    pid="$(pidof -s ${DRIVER_PIDOF})"
     if [ "$?" -ne 0 ]
     then
         echo "Couldn't get pid"
@@ -107,7 +110,7 @@ check_mem_usage_increase() {
     local sz_1=
     sz_1="$(ps --no-headers --format=sz "${pid}")"
 
-    update_app "$(pidof driver)"
+    update_app "$(pidof ${DRIVER_PIDOF})"
     sleep "${SLEEP_AFTER_UPDATE}"
 
     local rsz_2=
@@ -121,10 +124,10 @@ check_mem_usage_increase() {
     printf '%d\t%d\t%d\n' $(( rsz_2 - rsz_1 )) $(( vsz_2 - vsz_1 )) $(( sz_2 - sz_1 ))
 }
 
-pidof driver >/dev/null 2>&1
+pidof "${DRIVER_PIDOF}" >/dev/null 2>&1
 if [ "$?" -eq 0 ]
 then
-    echo "driver already running, kill it first"
+    echo "${DRIVER_PIDOF} already running, kill it first"
     exit 1
 fi
 
@@ -136,9 +139,9 @@ do
     get_pid
     sleep 1
 
-    check_mem_usage_increase "$(pidof driver)"
+    check_mem_usage_increase "$(pidof ${DRIVER_PIDOF})"
 
-    kill_app "$(pidof driver)"
+    kill_app "$(pidof ${DRIVER_PIDOF})"
 
     echo
 done
