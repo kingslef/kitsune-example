@@ -1,6 +1,8 @@
 Kitsune Example
 ===============
 
+**Moved to https://gitlab.com/aatos/kitsune-example**
+
 Small example application using [kitsune-dsu](http://kitsune-dsu.com/).
 
 Application has an array of 160 MB data (20971520 elements, each element contains two
